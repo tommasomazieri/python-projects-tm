@@ -55,7 +55,7 @@ also: 'hello' != 'hello' False  # works with strings as well
 print(2 < 3) -> True
 print('hello' == 'helo') -> False
 """
-# 4 IF, ELIF, ELSE
+# 4) IF, ELIF, ELSE
 """
 if condition is True: -> x == y; stat is False...
 ----do thing  # 4 indents needed!
@@ -74,4 +74,83 @@ elif height > 2:
 else:
     print('you can ride!')    
 """
+# 5) CHAINED CONDITIONALS AND NESTED STATEMENTS
+"""
+examples of chained conditions are:
+x = 2
+y = 3
+if y == x and x + y == 5:  # &
+    print('True')
+else:
+    print(':(')
+if y == x or x + y == 5:  # |
+    print('True')
+# but also:
+if not(y == x and x + y == 5):  # &
+    print('True')
+
+now, for the nested statements, we may have something like:
+if x == 2:
+    if y == 3:
+        print('x == 2 and y == 3')
+    else:
+        print('x == 2, y != 3')
+else:
+    print('x != 2')
+"""
+# 6) FOR LOOPS
+"""
+for x in range(0, 10, 1):  # range parameters: start, stop, step
+    print(x)
+"""
+# 7) WHILE LOOPS
+"""
+while condition == True:
+    do this
+    
+for example:
+loop = True
+while loop:
+    name = input('insert something: ')
+    if name == 'stop':
+        break  # or, set: loop = False
+"""
+# 8) LISTS AND TUPLES
+"""
+lists:
+fruits = ['apple', 'pear', 3]
+print(fruits)
+# to access an individual item in the list:
+print(fruits[1])
+fruits.append('banana')  # add sto the end of the list given item
+print(fruits)
+# to change a given item in a list:
+fruits[1] = 'strawberry'
+print(fruits)
+
+tuples:
+position = (2, 3)  # works best for coordinate data!
+"""
+# 9) ITERATION BY ITEM
+"""
+fruits = ['apples', 'pears', 'strawberries']
+for fruit in fruits:
+    if fruit == 'pears':
+        print(fruit)
+    else:
+        print('not pears')
+"""
+# 10) STRING METHODS
+"""
+# .strip(), len(), .lower(), .upper(), .split(), ...
+text = input('input something: ')
+print(text)
+print(text.strip())  # removes spaces
+print(len(text))  # number of characters in string
+print(text.lower())  # turns all characters to lower case
+print(text.upper())  # turns all characters to upper case
+print(text.split())  # creates a list out of the string, inside, define the delimiter of separation
+# for more methods, look to documentation on python website...
+"""
+
 

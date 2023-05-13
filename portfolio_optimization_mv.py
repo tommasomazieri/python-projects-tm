@@ -233,12 +233,6 @@ class EfficientFrontier:  # v: 1.0.0
         weightings = pd.DataFrame(
             np.array(weights_list), index=portfolios, columns=self.processed_data.index
         )
-        # here add eff_fr['sigma_e'] = sum(weights_row ** 2 * self.processed_data["sigma_e"]) so that assets match
-
-        # MAKE IT BETTER AND MORE COMPACT, MAYBE MERGED IN THE FORE LOOP ABOVE (?)
-        # efficient_frontier['sigma_e'] = 0
-        # for i, row in weightings.iterrows():
-        #     efficient_frontier.loc[i, 'sigma_e'] = sum((row ** 2) * sigma_e) ** .5
         # we might make a function that measures the diversification of a portfolio so that can be generically used
         return efficient_frontier, weightings
 
