@@ -1,3 +1,10 @@
+"""
+Hello,
+this is a portfolio optimization script, following single-index model, mean-variance portfolio optimization.
+
+documentations regarding this script can be found in 'portfolio_optimization_script_docs' folder
+
+"""
 # REMOVE THIS ONES HERE!
 from dbconn import eod_df, currency_conversion_df  # SOLVE PROBLEM OF HAVING THOSE TWO FUNCTIONS HERE!
 
