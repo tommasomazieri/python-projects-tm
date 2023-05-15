@@ -152,5 +152,28 @@ print(text.upper())  # turns all characters to upper case
 print(text.split())  # creates a list out of the string, inside, define the delimiter of separation
 # for more methods, look to documentation on python website...
 """
+# 11) SLICE OPERATOR
+"""
+fruits = ['apples', 'pears', 'strawberries']
+text = 'Hello I like python'
+start = 0
+stop = None  # to go all the way, if code doesn't always goes down
+step = 2
+print(text[start:stop:step])
+# to insert elements, instead of append, which adds to the end of a list the given element, use:
+place = 1
+fruits[place:place] = 'b'
+print(fruits)
+"""
+# 12) FUNCTIONS
+"""
+def do_something(some_parameters):
+    return something
+# and then, call function:
+do_something(param)  # here, the function executes its code...
+you can set function to a variable, or print it, or just execute it, depending on what the function does
+"""
+
+
 
 

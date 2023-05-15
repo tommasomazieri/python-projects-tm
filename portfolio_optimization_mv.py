@@ -6,7 +6,7 @@ documentations regarding this script can be found in 'portfolio_optimization_scr
 
 """
 # REMOVE THIS ONES HERE!
-from dbconn import eod_df, currency_conversion_df  # SOLVE PROBLEM OF HAVING THOSE TWO FUNCTIONS HERE!
+from dbconn import currency_conversion_df  # SOLVE PROBLEM OF HAVING THOSE TWO FUNCTIONS HERE!
 
 import string
 import timeit
@@ -47,6 +47,7 @@ class InternationalDiversification:  # v: 1.0.0
         self.rf_rate = risk_free_rate
         self.pf = portfolio.set_index('stock_id')
         self.returns_dataframe = returns_dataframe  # replace with GARCH in variances()...
+        # externalize measurement of curr_df!!!
         self.curr = np.unique(self.pf["currency"].to_numpy())  # list of unique currencies in portfolio
         self.curr_list = [[f"{x}/{self.qc}", ""] for x in self.curr if x != self.qc]
         # assets_returns_matrix is an external function, deal with it!
@@ -148,9 +149,6 @@ class EfficientFrontier:  # v: 1.0.0
         return opt.fun, opt.x
 
     def process_input_data(self) -> pd.DataFrame:
-        """in future, we will also adjust implied_returns using Inter_diver, for now, we just change variance. In the
-        auxiliary script, we need to implement a method to get currency given exchange..."""
-        # WORK ON IT
         # to make it more understandable, maybe we should substitute df0 with self.portfolio...
         df0 = InternationalDiversification(
             portfolio=self.portfolio,
@@ -196,8 +194,6 @@ class EfficientFrontier:  # v: 1.0.0
         # return df.drop("acceptable", axis=1)
         return df["weights"].to_numpy()
 
-    """defining the efficient frontier and the portfolio allocation, given the method used"""
-
     def efficient_frontier(self) -> (pd.DataFrame, pd.DataFrame):
         target_returns = np.linspace(
             self.portfolio_performance(self.minimum_variance()[1])[0],
@@ -236,21 +232,9 @@ class EfficientFrontier:  # v: 1.0.0
         # we might make a function that measures the diversification of a portfolio so that can be generically used
         return efficient_frontier, weightings
 
-    def portfolio_allocation(self) -> (json, json):  # pass as parameters and the currency conversion function of choice!
+    def portfolio_allocation(self) -> (json, json):  # pass as parameter the currency conversion function of choice
         """define the allocation of your capital to the various selected assets, given their current prices and weights
         provided. It will return the stock allocation (n. of shares) and the value (in the chosen currency).
-        Now here things get messy. If we demand for the rf_paired portfolio, the efficient frontier provided will be
-        adjusted in weights aas follows: it is normally measured for each given portfolio. Then, the risk_free asset is
-        added in weight varying to adjust risk/return structure of the eff_frontier (80% pf, 20% rf -> ret, risk adj)
-        I am not sure how to properly make this passage. we need to find the exp_ret of our etf used as rf_proxy and
-        its variance and then find the new variance or probably we will have to directly add the rf_etf in our
-        pf_calculation but it is not going to give us something reasonable, as the new eff_fr should have constant
-        s_ratio == max_s_ratio at any given variance level. So really the rf should be var = 0 and the new pf_risk will
-        so be just a portion of the initial pf_risk. See what is right...
-        SOME ETF FOR THAT SCOPE:
-        ('EXVM', 'XETR'), ('SEGA', 'MTA'), ('VGEB', 'XETR'), ('IS0L', 'XETR')
-        We found it, it can approximate with a vol = 0.25%: ('EL4W', 'XETR') -> tho it is a monetary market etf, not a
-        lt risk_free rate, so I'm not sure if we can actually use it...
         """
         eff_fr, weightings = self.efficient_frontier()
 
@@ -281,10 +265,17 @@ class EfficientFrontier:  # v: 1.0.0
 if __name__ == "__main__":
     start = timeit.default_timer()
 
-    # LOAD ALL INPUTS FROM EXTERNAL SAMPLE PARQUET FILES!
+    # LOAD ALL INPUTS FROM EXTERNAL SAMPLE PARQUET FILES
+    assets_data = pd.read_parquet('assets_data.parquet')
+    assets_daily_returns = pd.read_parquet('assets_daily_returns.parquet')
+    assets_prices = pd.read_parquet('assets_prices.parquet')
+    benchmark_market_data = pd.read_parquet('benchmark_market_data.parquet')
+    benchmark_market_daily_returns = pd.read_parquet('benchmark_market_daily_returns.parquet')
+    rf = .034
+
     print(
         EfficientFrontier(
-            assets, ast_ret, ast_pr, mkt, mkt_ret, rf,
+            assets_data, assets_daily_returns, assets_prices, benchmark_market_data, benchmark_market_daily_returns, rf,
             invested_capital=100_000, short=False, bound_lim=(0, 1), portfolio_currency="EUR"
         ).portfolio_allocation()
     )
