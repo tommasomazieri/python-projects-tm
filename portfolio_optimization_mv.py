@@ -41,17 +41,15 @@ class InternationalDiversification:  # v: 1.0.0
             portfolio: pd.DataFrame,
             risk_free_rate: float,
             returns_dataframe: pd.DataFrame,
+            currencies_returns_to_base: pd.DataFrame,
             quote_currency="EUR"
     ):
         self.qc = quote_currency
         self.rf_rate = risk_free_rate
         self.pf = portfolio.set_index('stock_id')
-        self.returns_dataframe = returns_dataframe  # replace with GARCH in variances()...
-        # externalize measurement of curr_df!!!
-        self.curr = np.unique(self.pf["currency"].to_numpy())  # list of unique currencies in portfolio
-        self.curr_list = [[f"{x}/{self.qc}", ""] for x in self.curr if x != self.qc]
-        # assets_returns_matrix is an external function, deal with it!
-        self.curr_df = assets_returns_matrix(self.curr_list, is_index=True, cons=0, st_date='2017-01-01')
+        self.returns_dataframe = returns_dataframe
+
+        self.curr_df = currencies_returns_to_base
 
     def variances(self) -> pd.DataFrame:
         """return the dataframe with symbol variance, his currency variance and the covariance between symbol and
@@ -88,6 +86,7 @@ class EfficientFrontier:  # v: 1.0.0
             assets_prices: pd.DataFrame,
             benchmark_market_data: pd.DataFrame,
             benchmark_market_returns: pd.DataFrame,
+            currencies_returns_to_base: pd.DataFrame,
             risk_free_rate: float,
             invested_capital: float | int = 100_000,
             short=False,  # for now, no short positions are allowed
@@ -109,7 +108,7 @@ class EfficientFrontier:  # v: 1.0.0
 
         self.rf_rate = risk_free_rate  # value expressed in decimals, not percentage
 
-        self.processed_data = self.process_input_data()
+        self.processed_data = self.process_input_data(currencies_returns_to_base)
 
         self.bound = bound_lim if short is False else (-1, 1)
 
@@ -148,13 +147,14 @@ class EfficientFrontier:  # v: 1.0.0
                            constraints=constraints)
         return opt.fun, opt.x
 
-    def process_input_data(self) -> pd.DataFrame:
+    def process_input_data(self, currencies_returns_to_base) -> pd.DataFrame:
         # to make it more understandable, maybe we should substitute df0 with self.portfolio...
         df0 = InternationalDiversification(
             portfolio=self.portfolio,
             risk_free_rate=self.rf_rate,
             quote_currency=self.currency,
-            returns_dataframe=self.assets_returns
+            returns_dataframe=self.assets_returns,
+            currencies_returns_to_base=currencies_returns_to_base
         ).variances()
         # DESCRIBE WHAT YOU ARE DOING HERE. REMOVE USELESS STEPS...
         # STARTS MEASURING CAPM RETURNS OF EACH ASSET:
@@ -271,12 +271,13 @@ if __name__ == "__main__":
     assets_prices = pd.read_parquet('assets_prices.parquet')
     benchmark_market_data = pd.read_parquet('benchmark_market_data.parquet')
     benchmark_market_daily_returns = pd.read_parquet('benchmark_market_daily_returns.parquet')
+    currencies_returns_to_base = pd.read_parquet('currencies_returns_to_base.parquet')
     rf = .034
 
     print(
         EfficientFrontier(
             assets_data, assets_daily_returns, assets_prices, benchmark_market_data, benchmark_market_daily_returns, rf,
-            invested_capital=100_000, short=False, bound_lim=(0, 1), portfolio_currency="EUR"
+            currencies_returns_to_base, invested_capital=100_000, short=False, bound_lim=(0, 1), portfolio_currency="EUR"
         ).portfolio_allocation()
     )
 

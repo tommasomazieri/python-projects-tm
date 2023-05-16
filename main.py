@@ -215,6 +215,104 @@ print(math.radians(60))
 print(myModule.my_func(6))
 """
 # 17) OPTIONAL PARAMETERS
+"""
+def func(x, text):
+    print(x)
+    if text == '1':
+        print('text is 1')
+    else:
+        print('text is not 1')
+
+
+func('hello', '1')
+
+# now, make default values instead
+def func(x, text='2'):
+    print(x)
+    if text == '1':
+        print('text is 1')
+    else:
+        print('text is not 1')
+
+
+func('hello', text='1')
+"""
+# 18) TRY AND EXCEPT
+"""
+# use it when you need to do something, but do not know if it is going to work...
+text = input('username: ')
+try:
+    number = int(text)
+    print(number)
+except:
+    print('invalid username')
+"""
+# 19) GLOBAL VS LOCAL VARIABLES
+"""
+var = 9  # this variables are global on the script
+loop = True
+
+
+def func(x):
+    newVar = 7  # this variable is local of the function
+    print(var)
+    if x == 5:
+        return newVar
+
+
+func(5)
+# you do not want to be dependent on global variables in your functions tho...
+# also, if wue modify a global variable in a function...
+def func(x):
+    newVar = 7
+    var = 0
+    if x == 5:
+        return newVar
+# ... it will not be modified globally, but just inside the function itself:
+func(5)
+print(var) == 9
+
+
+# to apply changes globally, use global keyword:
+def func(x):
+    global var
+    newVar = 7
+    var = 0
+    if x == 5:
+        return newVar
+"""
+# 20) CLASSES AND OBJECTS
+"""
+# object: any variable is an object, which have particular attributes
+x = 'string'
+y = 23
+# z = x + y returns TypeError: can only concatenate str (not "int") to str
+
+# class:
+class Number:
+    def __init__(self, num_):  # initialization function
+        self.var = num_
+
+    def display(self, x):
+        print(x)
+
+
+num = Number(23)
+num.display(num.var)
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
