@@ -173,7 +173,48 @@ def do_something(some_parameters):
 do_something(param)  # here, the function executes its code...
 you can set function to a variable, or print it, or just execute it, depending on what the function does
 """
+# 13) READ TEXT FILES
+"""
+file = open('file', 'r')
+f = file.readlines()  # list of elements in file. separated by \n character
+new_list = []
+for line in f:
+    if line[-1] == '\n':
+        new_list.append(line[:-1])  # here, we remove \n character on all elements having it
+    else:
+        new_list.append(line)
+# or, in a shorter and cleaner way:
+new_list = []
+for line in f:
+    new_list.append(line.strip())  # or: new_list.append(line.replace('\n', ''))
+print(new_list)
+"""
+# 14) WRITING TO A TEXT FILE
+"""
+file = open('file', 'w')
+file.write('python\neasy\nnibbas')  # this will replace content of given file with whatever you provide
+file.close()  # saves file changes
+"""
+# 15) USING .count() AND .find()
+"""
+# .find(), .count()
+string = input('please type something')
+# string.find('h'): if you place a character not in string, returns -1. Returns first place character is found
+# string.count(''): counts how many times a character/s is repeated
+if string.count('_') > 0:  # or if string.find('_') != -1
+    print('not good')
+else:
+    print('good')
+"""
+# 16) INTRO TO MODULAR PROGRAMMING
+"""
+import math
+import myModule
 
+print(math.radians(60))
+print(myModule.my_func(6))
+"""
+# 17) OPTIONAL PARAMETERS
 
 
 
