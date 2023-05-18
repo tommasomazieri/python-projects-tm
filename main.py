@@ -2,6 +2,8 @@
 CODE FOR: BEGINNER LEVEL PYTHON COURSE
 """
 # 0) BASIC DATA TYPES
+import math
+
 """
 int -> 5, -3, 0 ...
 str -> "stuff", 'foo1' ...
@@ -300,19 +302,205 @@ class Number:
 num = Number(23)
 num.display(num.var)
 """
+"module 2: classes and objects"
+# 2) CREATING CLASSES
+"""
+class Dog(object):
+    def __init__(self, name, age):
+        self.name = name  # an attribute of the class
+        self.age = age
+
+    def speak(self):  # a method of the class
+        print(f'hi, I am {self.name} and I am {self.age} years old')
+
+    def change_age(self, age):
+        self.age = age
+
+    def add_weight(self, weight):
+        self.weight = weight
 
 
+tim = Dog('Tim', 5)
+fred = Dog('Fred', 3)
+tim.change_age(6)
+tim.speak()
+fred.speak()
+tim.add_weight(70)
+
+print(tim.name)
+print(tim.weight)
+print(fred.weight)  # it wont work as we have not yet defined it
+"""
+# 3) INHERITANCE
+"""
+class Cat(object):  # copies from class Dog and adds some stuff
+    def __init__(self, name, age, color):
+        self.name = name  # an attribute of the class
+        self.age = age
+        self.color = color
+
+    def speak(self):  # a method of the class
+        print(f'hi, I am {self.name} and I am {self.age} years old')
+# a better way to do this is:
+#        parent
+class Cat(Dog):
+    def __init__(self, name, age, color):
+        super().__init__(name, age)
+        self.color = color
+        self.name = 'Tech'  # overrides name attribute of parent
+
+    def talk(self):
+        print('Meow!')
 
 
+tim = Cat('Tim', 5, 'red')
+tim.speak()  # it inherit all the methods of the parent
+tim.talk()  # overrides the parent method of talk
 
 
+class Vehicle:
+    def __init__(self, price, gas, color):
+        self.price = price
+        self.gas = gas
+        self.color = color
+
+    def fill_up_tank(self):
+        self.gas = 100
+
+    def empty_tank(self):
+        self.gas = 0
+
+    def gas_left(self):
+        return self.gas
 
 
+class Car(Vehicle):
+    def __init__(self, price, gas, color, speed):
+        super().__init__(price, gas, color)
+        self.speed = speed
+
+    def beep(self):
+        print('Beep Beep')
 
 
+class Truck(Vehicle):
+    def __init__(self, price, gas, color, tires):
+        super().__init__(price, gas, color)
+        self.tires = tires
+
+    def beep(self):
+        print('Honk Honk')
+"""
+# 4) OVERRIDING METHODS
+"""
+class Point:
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+        self.coord = (self.x, self.y)
+
+    def move(self, x, y):
+        self.x = x
+        self.y = y
+
+    def length(self):
+        import math  # to import only when needed (?)
+        return math.sqrt(self.x**2 + self.y**2)
+
+    def __add__(self, point):  # __add__ is in function of python, here, we modify it
+        return Point(self.x + point.x, self.y + point.y)
+    # same for __sub__, __mul__ ...
+
+    def __mul__(self, point):
+        return self.x * point.x + self.y * point.y
+
+    def __str__(self):  # used to show some meaningful value instead of coordinates of memory when printing
+        return "{" + str(self.x) + "," + str(self.y) + "}"  # it has to return a string!!!
+
+    def __gt__(self, point):  # compares which of the objects is greater given certain criteria
+        return self.length() > point.length()
+
+    def __ge__(self, point):  # greater or equal to
+        return self.length() >= point.length()
+
+    def __le__(self, point):  # less or equal to
+        return self.length() <= point.length()
+
+    def __eq__(self, point):  # equal to
+        return self.length() == point.length()
 
 
+p1 = Point(3, 4)
+p2 = Point(3, 2)
+p3 = Point(1, 3)
+p4 = Point(0, 1)
 
+p5 = p1 + p2  # will crush for now, we need to work on code, adding: def __add__(self, point)
+p6 = p3 * p4  # not a point anymore, but a scalar
+p7 = p2 <= p3
+print(p5)  # returns object
+print(p6)  # returns scalar
+print(p7)  # returns bool
+"""
+# 5) STATIC METHODS AND CLASS METHODS
+"""
+class Dog:
+    dogs = []  # class variable. Is useful for variables that you use statically for each instance of a class
+
+    def __init__(self, name):
+        self.name = name  # an attribute of the class
+        self.dogs.append(self)
+
+    @classmethod
+    def num_dogs(cls):
+        return len(cls.dogs)
+
+    @staticmethod
+    def bark(n):  # here, tho, you cannot call self methods!
+        for _ in range(n):
+            print('Bark!')
+
+
+tim = Dog('Tim')
+jim = Dog('Jim')
+print(Dog.dogs)
+# but also:
+print(jim.dogs)
+
+print(tim.num_dogs())
+
+# now, staticmethod:
+Dog.bark(2)  # no need to instantiate the class
+# but also:
+tim.bark(3)
+"""
+# 6) PRIVATE AND PUBLIC CLASSES
+"""
+# you can still use private classes and methods, it is just a convention to do so to inform other coders
+class _Private:  # cannot be accessed outside the script
+    # the underscore signals that we intend the class to be private
+    def __init__(self, name):
+        self.name = name
+
+
+class NotPrivate:  # can be accessed outside the script
+    def __init__(self, name):
+        self.name = name
+        self.priv = _Private(name)
+
+    def _display(self):
+        # underscore represent private method
+        print('hello')
+
+    def display(self):
+        print('hi')
+
+
+test = NotPrivate('tim')
+test.display()
+# you may also do:
+test._display()  # but it will be underlined as protected member of a class
+"""
 
 
 

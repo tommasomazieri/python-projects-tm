@@ -293,6 +293,7 @@ if __name__ == "__main__":
     assets_daily_returns = pd.read_parquet('assets_daily_returns.parquet')
     assets_prices = pd.read_parquet('assets_prices.parquet')
     benchmark_market_data = pd.read_parquet('benchmark_market_data.parquet')
+    print(benchmark_market_data)
     benchmark_market_daily_returns = pd.read_parquet('benchmark_market_daily_returns.parquet')
     currencies_returns_to_base = pd.read_parquet('currencies_returns_to_base.parquet')
     rf = .034
