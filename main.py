@@ -501,6 +501,84 @@ test.display()
 # you may also do:
 test._display()  # but it will be underlined as protected member of a class
 """
+"module 3: intermediate level"
+# 1) OPTIONAL PARAMETERS
+"""
+def func(x, y=1):
+    return x ** 2 / y
+
+
+call = func(5, y=2)
+print(call)
+"""
+# 2) MORE ON CLASS METHOD
+"""
+class Person(object):
+    population = 50
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    @classmethod
+    def get_population(cls):
+        return cls.population
+    
+    @classmethod
+    def add_to_pop(cls, amt):
+        cls.population += amt
+
+    def display(self):
+        print(self.name, 'is', self.age, 'years old')
+
+
+new_person1 = Person('tim', 18)
+new_person2 = Person('jim', 20)
+new_person2.add_to_pop(10)
+
+print(Person.get_population())
+print(new_person1.get_population())
+"""
+# 3) map() FUNCTION
+"""
+# is used to apply a function to a list and return a new list with the results
+li = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+def func(x):
+    return x**x
+
+# you may do as follows:
+new_list = []
+for i in li:
+    new_list.append(func(i))
+# but a better way would be:
+new_list = list(map(func, li))  
+# just shortcut, shouldn't improve performances that much
+# you may also shorten code using a list comprehension:
+new_list = [func(x) for x in li]
+# which allows for more flexibility, as you can use if statements in it:
+new_list = [func(x) for x in li if x > 2]
+"""
+# 4) filter() FUNCTION
+"""
+def add7(x):
+    return x + 7
+
+
+def is_odd(x):
+    return x % 2 != 0
+
+
+a = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+b = list(filter(is_odd, a))
+print(b)
+c = list(map(add7, b))
+print(c)
+"""
+
+
+
 
 
 
