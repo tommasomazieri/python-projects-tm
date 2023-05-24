@@ -576,8 +576,115 @@ print(b)
 c = list(map(add7, b))
 print(c)
 """
+# 5) LAMBDA FUNCTIONS
+"""
+# anonymous functions, so funcs that are not defined directly
+# you may want too apply it for very short and basic function to save space in code
+def func(x):
+    return x + 5
 
+func2 = lambda x: x + 5  # useful for map and other builtin functions
+print(func(2))
+print(func2(9))
 
+def func3(x):
+    # useful when having functions inside of functions, instead of having to define them outside
+    func4 = lambda x: x + 5
+    return func4(x) + 85
+
+print(func3(2))
+
+a = [1,2,3,4,5,6,7,8,9]
+
+# sums 5 to each element in list:
+new_list = list(map(lambda x: x + 5, a))
+print(new_list)
+"""
+# 6) COLLECTIONS/Counter()
+"""
+# containers:
+#   list
+#   set
+#   dict
+#   tuple - immutable
+# Types:
+#   counter <- this session
+#   deque
+#   namedTuple()
+#   orderedDict
+#   defaultDict
+
+import collections
+from collections import Counter
+
+c = Counter('gallad')
+d = Counter(['a', 'a', 'b', 'c', 'c'])
+e = Counter({'a': 1, 'b': 2})
+f = Counter(cats=4, dogs=5)
+print(c)  # splits string and counts each character repetitions  
+print(d)  # is its own specific object
+print(e['c'])  # key not in keys doesn't return error
+print(f['cats'])  # shows specific key
+
+print(list(f.elements()))  # shows each element in counter object in its amount
+print(c.most_common(2))  # shows the n most common elements
+
+c = Counter(a=4, b=2, c=0, d=-2)
+d = ['a', 'b', 'b', 'c']  # can use any other counter object, not only list
+c.subtract(d)  # subtracts the counts form similar argument
+print(c)
+c.update(d)  # adds the counts
+print(c)
+c.clear()  # removes all the counts
+print(c)
+
+c = Counter(a=4, b=2, c=0, d=-2)
+d = Counter(['a', 'b', 'b', 'c'])
+
+print(c+d)  # returns added values removes <= 0 ones
+print(c-d)  # if an element count is <= 0 is going to be removed
+
+print(c & d)  # intersection of the counters (so showing only common elements > 0
+print(c | d)  # shows all > 0 elements in both counters, on their max amount
+
+"""
+# 7) COLLECTIONS/namedtuple()
+"""
+# useful when writing large files
+from collections import namedtuple
+
+point1 = namedtuple('Point', 'x y z')  # can also pass: ['x', 'y', 'z'] and other iterable
+newP = point1(3, 4, 5)
+print(newP)
+print(newP.x, newP.y, newP.z)  # access each element, not doable in tuples
+print(newP[0])
+
+newP = newP._replace(y=6)
+print(newP)
+
+p2 = point1._make(['a', 'b', 'c'])  # replaces all values of keys with arguments in iterable
+print(p2)
+"""
+# 8) COLLECTIONS/deque()  called 'deck'
+"""
+# useful as is faster to add elements at the beginning and end of a list
+d = deque('hello')
+print(d)
+d.append('4')  # adds argument to the end of the list
+print(d)
+d.appendleft('5')  # adds argument to the beginning of the list
+print(d)
+d.pop()  # removes last element in iterable, popleft removes the first one
+# d.clear()  # clears the iterable
+
+d.extend('456')  # adds the new iterable at the end of the existing one
+print(d)
+
+d = deque('hello', maxlen=5)
+print(d)
+d.append(1)
+print(d)  # h is removed to maintain the max amount of 5 elements
+"""
 
 
 
