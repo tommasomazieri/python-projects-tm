@@ -685,7 +685,57 @@ print(d)
 d.append(1)
 print(d)  # h is removed to maintain the max amount of 5 elements
 """
+"module 4: expert level"
+# 1) Dunder/Magic METHODS & THE PYTHON DATA MODEL
+"""
+class Person:
+    def __init__(self, name):  # it is a dunder method
+        self.name = name
 
+    def __repr__(self):  # display for the print method
+        return f'Person({self.name})'
+
+    def __mul__(self, x):
+        if type(x) is not int:
+            raise Exception('invalid argument, must be int')
+        self.name = self.name * x
+
+    def __call__(self, y):
+        print(y)
+
+    def __len__(self):
+        return len(self.name)
+
+
+p = Person('tim')
+p * 4
+print(p)
+p(4)
+print(len(p))
+------------------------------------------------
+from queue import Queue
+import inspect  # use it to print the source of codes, instead of having to search for them in rep
+
+q = Queue()
+print(q)
+
+print(inspect.getsource(Queue))
+---------------------------------------------
+from queue import Queue as Q
+
+
+class Queue(Q):
+    def __repr__(self):
+        return f'Queue({self._qsize()})'
+
+    def __add__(self, other):
+        self.put(other)
+
+
+qu = Queue()
+qu + 9
+print(qu)
+"""
 
 
 
